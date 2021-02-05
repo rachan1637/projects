@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/intro_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.gameproject.puzzle_game.Activity.PuzzleGameActivity">
+
+    <TextView
+        android:id="@+id/puzzle_game_intro"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:textSize="15sp"
+        android:text="@string/puzzle_game_intro" />
+
+    <TextView
+        android:id="@+id/puzzle_game_intro2"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/puzzle_game_intro"
+        android:layout_marginTop="20dp"
+        android:textSize="15sp"
+        android:text="@string/puzzle_instruction" />
+
+
+    <TextView
+        android:id="@+id/puzzle_game_intro3"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/puzzle_game_intro2"
+        android:layout_marginTop="20dp"
+        android:textSize="15sp"
+        android:text="@string/puzzle_game_intro2" />
+
+    <Button
+        android:id="@+id/start_puzzle_game_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/puzzle_game_intro"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:text="@string/start_puzzle_game" />
+
+    <Button
+        android:id="@+id/customize_puzzle_game_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/start_puzzle_game_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:text="@string/customize" />
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/customize_puzzle_game_button"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100dp"
+        android:text="@string/back" />
+
+</RelativeLayout>

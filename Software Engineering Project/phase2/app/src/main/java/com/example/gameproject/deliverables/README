@@ -1,0 +1,32 @@
+1. This game only supports phones with lcd densities: 120, 160, 213, 240, 280, 320, 360, 400, 420, 480, 560, 640
+2. To run this game in Android Studio, clone it first then select Pixel 3 API 28 as the device, or use any device
+with the above lcd densities
+3. There maybe occasional issues with android studio where java files are turned blank for unknown reasons(this
+only happened once), if that happened the file affected needs to be recovered from previous commits.
+4. Once the game starts, make sure to create an account by navigating to Log In - Sign Up page. You can still play
+without an account but your progress may not be saved for the next time.
+5. There may be occasional issues with Android emulator. This could result in problems in the file storing user info.
+In that case, please wipe data and cold boot your device in AVD manager, and all should be fine.
+6. There are three mini games in total in this game, you can read about how to play each one in each their starting page
+7. (Phase 2)All games have a difficulty setting, if you are starting out you may want to play on lower difficulty first.
+8. (Phase 2)As a bonus feature, You have 9 pieces of picture to unlock in the game. You can unlock
+    them by playing any of the three mini-games and reaching a certain goal.
+
+    In Obstacle game you can collect yellow treasure boxes by colliding with them, which will unlock
+    a piece of the picture.
+
+    In Puzzle game, you can complete any of the following achievements:
+        (1) solving one puzzle under 30 seconds.
+        (2) solving one puzzle and receive a score increase of more than 70.
+        (3) receiving a total score of more than 150.
+    Each of these unlocks 1 piece of the picture.
+
+    In Reaction game, you can unlock a piece of picture by scoring over 5000 points(in reaction game, you can only score
+    over 5000 points by selecting 0.5s/mole or 0.25s/mole in customization, and you should click exit at the end, not back button)
+
+    You can do all of these task for each game, or repeat the same task for any game unlock all 9
+    pieces of the picture. You can view your collections in MainMenu - Achievements, and once you collect
+    all 9 of them, you can play a bonus level with that picture in puzzle game.
+
+
+Have Fun!

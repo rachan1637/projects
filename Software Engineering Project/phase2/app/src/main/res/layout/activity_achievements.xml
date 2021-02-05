@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/achievements"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.gameproject.puzzle_game.Activity.PuzzleGameActivity" >
+
+    <TextView
+        android:id="@+id/achievements_text"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        android:textSize="20sp"
+        android:text="@string/achievements" />
+
+    <RelativeLayout
+        android:id="@+id/linear_grid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/achievements_text"
+        android:layout_marginStart="60dp">
+
+        <GridView
+            android:id="@+id/achievements_grid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numColumns="3"
+            android:verticalSpacing="50dp"
+            android:horizontalSpacing="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/linear_grid"
+        android:layout_marginTop="50dp"
+        android:text="@string/back" />
+
+</RelativeLayout>

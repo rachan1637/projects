@@ -1,0 +1,233 @@
+#######
+#Step 1
+Code Affected: GestureDetectGridView, PuzzleAdapter, puzzleGameActivity, activity_puzzle_game
+Added PuzzleAdapter and GestureDetectGridView as the custom adapter and view for this game.
+Added basic methods for sliding functions in puzzleGameActivity.
+Changed activity_puzzle_game to display GestureDetectGridView.
+
+#######
+#Step 2
+Code Affected: puzzleGameActivity, R.drawable
+Fixed errors in puzzleGameActivity by replacing puzzle picture with pictures in res.drawable.
+
+#######
+#Step 3
+Code Affected: GestureDetectGridView, puzzleGameActivity, activity_puzzle_game
+Changed api in GestureDetectGridView to 29.
+Added setContentView() in puzzleGameActivity.
+Changed activity_puzzle_game to the proper directory.
+
+#######
+#Step 4
+Code Affected: AndroidManifest.xml, PuzzleGameIntroActivity.java, activity_puzzle_game_intro.xml,
+values.strings.xml
+Added an intro page for puzzle game that includes a brief intro to the game and a start game button.
+
+#######
+#Step 5
+Code Affected: activity_puzzle_game.xml
+Changed layout to fit display of time, puzzle completed, and the score.
+
+#######
+#Step 6
+Code Affected: puzzleGameActivity.java, activity_puzzle_game.xml, puzzle_game_options_window.xml,
+string.xml
+Changed layout of options popup window and created options (buttons).
+
+#######
+#Step 7
+Code Affected: puzzleGameActivity.java, puzzleGameIntroActivity.java,
+activity_puzzle_game_intro.xml, customize_puzzle_game_window.xml, string.xml
+Added popup window for customization for puzzle game.
+
+#######
+#Step 8
+Code Affected: puzzleGameIntroActivity.java
+Added spinner for puzzle dimensions customization for puzzle game.
+
+#######
+#Step 9
+Code Affected: puzzleGameActivity.java
+Added an integer ArrayList to store identifiers of the drawable puzzle images.
+
+#######
+#Step 10
+Code Affected: puzzleGameActivity.java
+Added a second puzzle, and changed swap function to direct to the second puzzle after completing
+the first.
+
+#######
+#Step 11
+Code Affected: puzzleGameActivity.java, puzzleGameIntroActivity.java
+Added variables for recording customization of puzzle dimensions. Passed variable onto
+puzzleGameActivity from puzzleGameIntroActivity.
+
+#######
+#Step 12
+Code Affected: puzzleGameActivity.java
+Implemented Timer that counts down, it can be paused by going into options and resumed when returned
+to the game.
+
+#######
+#Step 13
+Code Affected: puzzleGameActivity.java
+Add method setBackgroundClickable(boolean) to prevent users from moving tiles or clicking buttons
+in the background when game is paused and to allow actions when game is resumed.
+
+#######
+#Step 14
+Code Affected: puzzleGameActivity.java, GestureDetectGridView
+Added puzzleGameActivity variable in GestureDetectGridView so that methods and variables in
+puzzleGameActivity can be set as non-static and private.
+
+#######
+#Step 15
+Code Affected: puzzleGameActivity.java, activity_puzzle_game.xml
+Added textView for number of moves into the game-screen layout, and implemented number of completed
+puzzles, number of moves, and the score to the game.
+
+#######
+#Step 16
+Code Affected: puzzleGameActivity.java, puzzle_game_final_score_window.xml, strings.xml
+Added showFinalScore method and final score popup window.
+
+#######
+#Step 17
+Code Affected: All class and layout
+Reformatted the codes and deleted unnecessary codes.
+
+#######
+#Step 18
+Code Affected: GestureDetectGridView.java
+Changed target API level to 28, as required by Google Play Store.
+
+#######
+#Step 19
+Code Affected: ImageActivity, ImageDividable, puzzleGameActivity, PuzzleGameIntroActivity,
+activity_puzzle_game_select_image.xml, strings.xml.
+Added the customize image feature so that users can upload images from local gallery.
+
+#######
+#Step 20
+Code Affected: ImageActivity, puzzleGameActivity, activity_puzzle_game_select_image.xml,
+strings.xml.
+Added puzzle game dimensions customization feature.
+
+#######
+#Step 20
+Code Affected: BackgroundChangeActivity, puzzleGameActivity, PuzzleGameIntroActivity,
+activity_puzzle_game_background.xml, activity_puzzle_game_intro.xml, customize_puzzle_game.xml,
+arrays.xml, colors.xml, strings.xml
+Added background colour customization option, added BackgroundChangeActivity and
+activity_puzzle_game_background.xml to implement it.
+
+#######
+#Step 21
+Code Affected: puzzleGameActivity, PuzzleGameIntroActivity, customize_puzzle_game.xml
+Added countdown time customization option.
+
+#######
+#Step 21
+Code Affected: BackgroundChangeActivity, puzzleGameActivity, PuzzleGameIntroActivity, ImageActivity
+Implemented customization memory to each user.
+
+#######
+#Step 22
+Code Affected: CountDownGenerator, CountDownRequester, GestureDetectGridView, ImageActivity,
+puzzleGameActivity, PuzzleGameData, PuzzleGameDataGateway, PuzzleGamePresenter, PuzzleGameView,
+PuzzleGenerator, PuzzleRequester.
+Implemented the MVP pattern for puzzle game. CountDownGenerator is responsible for generating the
+countdown timer and implementing the related functions. CountDownRequester is an interface that
+CountDownGenerator interacts with to send updates . PuzzleGenerator is responsible for generating
+and performing actions (moves) on puzzles. PuzzleRequester is an interface that PuzzleGenerator
+interacts with to update puzzle when a valid move is performed. PuzzleGamePresenter uses the
+generators (models) to perform actions on the PuzzleGameView object and receives input from
+puzzleGameActivity. PuzzleGameData stores game data. PuzzleGameDataGateway is an interface that
+prevents the PuzzleGamePresenter from knowing about the PuzzleGameData.
+
+#######
+#Step 23
+Code Affected: GestureDetectGridView, PuzzleGameData, PuzzleGameDataGateway,
+PuzzleGameIntroActivity, PuzzleGamePresenter, PuzzleGameView, PuzzleGameGenerator.
+Deleted unnecessary import statements, changed accessibility modifiers, and fixed typos.
+
+#######
+#Step 24
+Code Affected: CustomImageGateway, ImageDatabaseGateway, ImageSplitter, puzzleGameActivity,
+PuzzleGamePresenter.
+Added CustomImageDatabase class to store custom images for different users. Changed imageDividable
+to ImageSplitter so that it has the single responsibility of splitting images into pieces.
+
+#######
+#Step 25
+Code Affected: CustomImageInteractor, CustomImageManager, ImageSplitter, puzzleGameActivity,
+PuzzleGamePresenter, ImageActivity.
+Fixed the bug of clearing all user customized images when restarting application by saving
+user-customized images in app external storage. Changed the ImageDatabaseGateway to
+CustomImageInteractor, which is responsible for interacting with device external storage to save
+and load images. Added CustomImageManager that is responsible for telling CustomImageInteractor to
+save images or retrieve images and encoding/decoding Strings containing filenames of image files.
+
+#######
+#Step 26
+Code Affected: GestureDetectGridView, puzzleGameActivity, PuzzleGamePresenter, PuzzleGenerator,
+PuzzleRequester, PuzzleListManager.
+Added PuzzleListManager class that is responsible for managing the list of images for puzzles.
+Added a Context variable in PuzzleGamePresenter that it can use to invoke methods.
+
+#######
+#Step 27
+Code Affected: PuzzleGameActivty, PuzzleGamePresenter, puzzle_game_shop, puzzle_game_options_windows.
+Added a mystery shop with three items: small hint, big hint, change puzzle.
+
+#######
+#Step 28
+Code Affected: PuzzleGameActivity.
+Modified puzzleGameActivity so that popup windows are dismissed when the activity is destroyed. This
+prevents memory leaks.
+
+#######
+#Step 29
+Code Affected: default1.jng, default2.jpeg.
+Changed the default images.
+
+#######
+#Step 30
+Code Affected: PuzzleGamePresenter, MysteryShopManager, puzzleGameActivity.
+Added the class MysteryShopManager that is responsible for buying items from the mystery shop.
+
+#######
+#Step 31
+Code Affected: puzzleGameActivity, AchievementsActivity, AchievementsAdapter,
+activity_achievements.xml.
+Put codes into new methods so that they are more organized in puzzleGameActivity. Added the unlock
+bonus puzzle button in AchievementsActivity so that users can do the bonus puzzle after they complete
+at least 9 achievements. Changed display format of the Achievements page.
+
+#######
+#Step 32
+Code Affected: AchievementsManager, BackgroundChangeActivity, CountDownGenerator, ImageActivity,
+puzzleGameActivity, PuzzleGameIntroActivity, PuzzleGamePresenter, PuzzleGameView
+Added AchievementsManager which enables the player to obtain three different achievements. Also
+turned the back button on the top left-hand side of the activity to off.
+
+#######
+#Step 33
+Code Affected: all files
+Separated and packaged all files.
+
+#######
+#Step 34
+Code Affected: README, PuzzleGameActivity, MysteryShopManager, PuzzleGamePresenter
+Updated README. Avoided 2 achievement toasts overriding each other. Changed score calculation and
+mystery shop item costs to unify the score with obstacle game.
+
+#######
+#Step 35
+Code Affected: PuzzleGameActivity, PuzzleGameIntroActivity
+Simplified code, changed exit button onclickListener so that the current activity will finish.
+
+#######
+#Step 36
+Code Affected: ImageActivity, CustomImageInteractor, CustomImageManager.
+Added delete button for selected images.

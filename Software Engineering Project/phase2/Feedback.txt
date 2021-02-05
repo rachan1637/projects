@@ -1,0 +1,34 @@
+Dear group_0606
+
+This semester, we talked about MVP, the Model-View-Presenter architecture. It has many advantages, particularly when working with Android. As you can see from your project, your activity classes have methods that are specific to Android. If you encapsulate the rest of your code sufficiently, it is possible to port it to another platform simply by creating a new UI (for example, a website).
+
+Encapsulation can take on many forms. You can package your View classes together. You can ensure that your dependencies go one-way, towards the inner more abstract layers. You can incorporate SOLID principles as much as possible and design patterns where they make sense.
+Here is feedback that is specific to your project:
+
+You made good use of...
++ packaging
++ interfaces
++ SOLID principles, especially Single Responsibility and Dependency Inversion Principle
++ design patterns including Façade, Observer, and Dependency Injection
++ uniform naming conventions across games
++ Javadoc
++ MVP structure
++ excellent encapsulation!
+
+A user sees...
++ three games that satisfy the system requirements
++ excellent acheivement system that unlocks a secret level
++ customization of pictures for the sliding tile game
++ creative definition of "difficulty level" for whack-a-mole. Nice!
++ pause and stop feature
+
+A good next step would be to...
++ Eliminate hardcoded values by replacing them with class variables. Then it is much easier to change them later on, or read them in from configuration files or user input.
++ Can you think of a way to get rid of casting by changing the way you use inheritance? It is generally a good idea to get rid of casting where possible so that future changes to your code require fewer edits.
++ Overall, excellent job!
+
+We hope that you enjoyed working on this project and found it a useful learning experience.
+
+Cheers,
+The CSC207 Instructional Team
+

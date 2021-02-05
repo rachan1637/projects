@@ -1,0 +1,495 @@
+---
+title: "Human Resource Explortary Analysis"
+author: "Yun-Hsiang Chan"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+---
+
+The human resource dataset is a simulated dataset from Kaggle. By exploring this dataset, we are able to extract good insights for problems that the Human Resource department deals daily. This project mainly focuses on explortary analysis.
+
+```{r, echo = FALSE}
+library(tidyverse)
+human_resource <- read_csv('HR_comma_sep.csv')
+```
+
+# Data Cleaning
+
+```{r, echo = FALSE}
+variables <- c("satisfaction_level", "last_evaluation", "number_project", 'average_montly_hours', 'time_spend_company', 'Work_accident', 'left', 'promotion_last_5years', 'sales', 'salary')
+
+descriptions <- c('Satisfaction Level', 'Last evaluation', 'Number of projects', 'Average monthly hours', 'Time spent at the company', 'Whether they have had a work accident', 'Whether the employee has left', 'Whether had a promotion in the last 5 years', 'Departments (column sales)', 'Salary')
+
+var <- data.frame(variables, descriptions)
+
+knitr::kable(var)
+```
+
+The descpitions of the variables are above. Let's do some data cleaning before we start the analysis.  
+
+Apparently, the variable name "sales"" is not the correct name for the variable. We can easily investigate and rename the variable as "department".  
+
+```{r}
+human_resource <- human_resource %>% rename(department = sales)
+```
+
+Besides, there is a typo existing in the variable for average monthly hours. Let's correct it.  
+
+```{r}
+human_resource <- human_resource %>% rename(average_monthly_hours = average_montly_hours)
+```
+
+Since the descrpition doesn't include the more details about 'promotion_last_5years', I don't think they will be useful in my analysis. So I decide to take it out from the dataset.  
+
+```{r}
+human_resource <- human_resource[, -which(names(human_resource) %in% c("promotion_last_5years"))]
+```
+
+Finally, for the purpose of contructing model in the analysis, we create a new variable called salary_factor. The number in this variable corresponds to the levels in variable salary.  
+
+```{r}
+human_resource <- human_resource %>% mutate(salary_factor = ifelse(salary == 'high', 1, ifelse(salary == 'medium', 0, -1)))
+```
+
+Now we can randomly pick some rows to understand the basic structure of this dataset.  
+
+```{r}
+human_resource[sample(nrow(human_resource), 10), ]
+```
+
+## Employee information
+
+First, let's take a look at the salary structure of the company.  
+
+```{r}
+human_resource %>% 
+  group_by(salary) %>% 
+  summarise(salary_count = n()) %>% 
+  mutate(salary_count_number = paste(salary, as.character(salary_count))) %>% 
+  ggplot(aes(x="", y=salary_count, fill=salary_count_number))+
+  geom_bar(width = 1, stat = "identity")
+```
+
+It is a very typical firm structure. Most of the employees receive low and medium level of salary. Only few people can receive high salary.  
+
+Then we can investigate the condition of employees' monthly working hours.  
+
+```{r}
+human_resource %>% ggplot(aes(x = average_monthly_hours)) + geom_histogram(bins = 30)
+```
+
+In this company, the median of the average monthly working hours is around 200. The distribution of monthly working hours is bimodal. One mode is around 150 hours and the other mode is around 260 hours.  
+
+```{r}
+human_resource %>% ggplot(aes(x = average_monthly_hours)) + 
+  geom_histogram(bins = 30) + 
+  facet_grid(~salary)
+```
+
+If we segment the groups for employees receiving different salary and view their distributions of monthly working hours seperately, these distributions will still be similar to the overall distribution. The only difference is that the modes of distribution of high salary employees are not obvious.  
+
+Next step, we can see the condition of employees' satisfaction level.  
+
+```{r}
+human_resource %>% ggplot(aes(x = satisfaction_level)) +
+  geom_histogram(bins = 30) + geom_vline(xintercept = median(human_resource$satisfaction_level))
+```
+
+By histogram, we know that a small amount of people are extremely unsatisfied. Apart from them, the other part of the distribution is quite uniform. We don't know the reason of unsatisfaction, but we might find it in the latter part.  
+
+At last, we can check the distribution of the time employees stay in the company.  
+
+```{r}
+human_resource %>% ggplot(aes(x = time_spend_company)) + geom_bar()
+```
+
+Most of the employees stay for less than 4 years. The most usual length of stay is 3 yeras. Only a few employees stay for more than 7 years. It indicates that this is a company open for less than 10 years.  
+
+## Department Information
+
+First, we need to know the size of the departments.  
+
+```{r}
+human_resource_dep <- human_resource %>% 
+  group_by(department) %>% 
+  summarise(n = n()) %>% 
+  mutate(prop = round(n / sum(n) * 100, digits = 2),
+         department_proportion = paste(department, as.character(prop)))
+
+ggplot(data = human_resource_dep, aes(x = "", y = prop, fill = department_proportion)) +
+  geom_bar(width = 1, stat = "identity", color = "white") +
+  coord_polar("y", start = 0)+
+  theme_void()
+```
+
+From the pie chart, we can know that in this firm, the biggest department is sales department. Besides, most of the employees are in sales, support and technical department. Apart from these three departments, each of the remaining departments only has less than 10% of the employees.  
+
+Then let's see some statistics related each department.  
+
+```{r}
+# Calculate the mean value of several variables, the proportion of work accident and proportion of people left in each department
+hr_department_1 <- human_resource %>%
+  group_by(department) %>% 
+  summarise(mean_average_monthly_working_hours = round(mean(average_monthly_hours), 2),
+            mean_satisfaction_level = round(mean(satisfaction_level), 2),
+            mean_last_evaluation_score = round(mean(last_evaluation), 2),
+            mean_number_projects = round(mean(number_project), 2),
+            mean_time_spend_company = round(mean(time_spend_company)),
+            work_accident_prop = round(mean(Work_accident), 2),
+            left_prop = round(mean(left), 2),
+            number_of_department_employees = n())
+
+# Calculate the proportion of low salary employee in each department
+
+hr_department_salary <- human_resource %>% 
+  group_by(department, salary) %>% 
+  summarise(n = n()) 
+
+hr_department_salary <- left_join(hr_department_salary, hr_department_1, by = 'department')
+hr_department_salary_low <- hr_department_salary %>% 
+  select(department, salary, n, number_of_department_employees) %>% 
+  filter(salary == 'low') 
+
+hr_department_salary_low_prop <- hr_department_salary_low %>%
+  mutate(salary_low_prop = round(n / number_of_department_employees * 100, 2)) %>% 
+  select(department, salary_low_prop)
+
+# Medium salary proportion
+hr_department_salary_medium <- hr_department_salary %>% 
+  select(department, salary, n, number_of_department_employees) %>% 
+  filter(salary == 'medium') 
+
+hr_department_salary_medium_prop <- hr_department_salary_medium %>%
+  mutate(salary_medium_prop = round(n / number_of_department_employees * 100, 2)) %>% 
+  select(department, salary_medium_prop)
+
+# High salary proportion
+hr_department_salary_high <- hr_department_salary %>% 
+  select(department, salary, n, number_of_department_employees) %>% 
+  filter(salary == 'high')
+
+hr_department_salary_high_prop <- hr_department_salary_high %>%
+  mutate(salary_high_prop = round(n / number_of_department_employees * 100, 2)) %>% 
+  select(department, salary_high_prop)
+
+hr_department_1 <- left_join(hr_department_1, hr_department_salary_high_prop, by = "department")
+hr_department_1 <- left_join(hr_department_1, hr_department_salary_medium_prop, by = "department")
+hr_department_1 <- left_join(hr_department_1, hr_department_salary_low_prop, by = "department")
+
+hr_department_final_1 <- hr_department_1 %>% select(department, mean_average_monthly_working_hours, mean_satisfaction_level, mean_last_evaluation_score, mean_number_projects, work_accident_prop, mean_time_spend_company)
+
+hr_department_final_2 <- hr_department_1 %>% select(department, left_prop, salary_high_prop, salary_medium_prop, salary_low_prop)
+
+knitr::kable(hr_department_final_1)
+knitr::kable(hr_department_final_2)
+```
+
+To it clear, I split the statistics into two tables.  
+
+The first table includes the variables indicating nothing important. These variables (mean average monthly working hours, mean satisfaction level, ...) are similar in each department.  
+
+The second table are the variables that show differences. Compared to other departments, management and RandD (an unknown department that dataset information doesn't explain, so I will skip the analysis on it) have relatively low leaving proportions. In addition, the management department has an extremely high salary proportion. This might be the main cause of the low leaving proportion in management department.  
+
+# Correlation Analysis
+
+To gain some insights, we need to see whether there is any relationship between the variables. The tool I use is correlation matrix.  
+
+```{r}
+library(corrplot)
+human_resource_num <- human_resource[, -which(names(human_resource) %in% c("salary", "department"))]
+hr_cor_matrix <- round(cor(human_resource_num), 2)
+knitr::kable(hr_cor_matrix)
+corrplot(hr_cor_matrix, method="pie")
+```
+
+There are several indications we can get.  
+1. The highest positive correlation is 0.42 (between number_project and average_monthly_hours), the highest negative correlation is -0.39 (between left and satisfaction_level).  
+2. The remaining correlations greater than 0.3 is 0.35 (between number_project and last_evaluation) and 0.34 (between last_evaluation and average_monthly hours). Both of them are related to last_evaluation.  
+3. It is noteworthy that left has low negative correlation withboth work_accident and salary_factor.  
+4. We cannot ignore that time spend company is postively correlated to number of project, monthly working hours and left. In addition, it is negatively correlated with satisfaction level.  
+
+# Question: Why employees leave the company?
+
+Remember we discover three factors (satisfaction level, salary, work accident and) having negative correlations with left and one factor (time spend company) having positive correlation with left. Does it mean that they are the reason for employees to leave the company?  
+
+Let's first investigate the satisfaction level.  
+
+```{r}
+human_resource %>% ggplot(aes(y = satisfaction_level)) +
+  geom_boxplot() + facet_grid(~left)
+```
+
+Without doubt, the boxplot implies that unsatisfaction is one of the main reasons for employees to leave.  
+
+Then we can look at the salary.  
+
+```{r}
+total_number_employee <- as.double(count(human_resource))
+
+human_resource %>% 
+  filter(left == 0) %>% 
+  group_by(salary) %>% 
+  summarise(salary_count = n(),
+            salary_percentage = round((salary_count / total_number_employee) * 100, 2)) %>% 
+  mutate(salary_count_number = paste(salary, as.character(salary_count)),
+         salary_level_percentage = paste(salary, as.character(salary_percentage))) %>% 
+  ggplot(aes(x="", y=salary_percentage, fill=salary_level_percentage))+
+  geom_bar(width = 1, stat = "identity") 
+
+num_employee_leave <- as.double(
+  human_resource %>% 
+  filter(left == 1) %>% 
+  summarise(n = n())
+)
+
+human_resource %>% 
+  filter(left == 1) %>% 
+  group_by(salary) %>% 
+  summarise(salary_count = n(),
+            salary_percentage = round((salary_count / num_employee_leave) * 100, 2)) %>% 
+  mutate(salary_count_number = paste(salary, as.character(salary_count)),
+         salary_level_percentage = paste(salary, as.character(salary_percentage))) %>% 
+  ggplot(aes(x="", y=salary_percentage, fill=salary_level_percentage))+
+  geom_bar(width = 1, stat = "identity") 
+```
+
+By comparing the barplots, we can know that among employees who didn't leave, 7.7% of them receive high salary. But among all employees who leave, only 2.3% of them receive high salary and the proportion of employees receiving low salary increaes by 28% (from 32.3% to 60.8%). Therefore, it is highly likely that salary is one of the main reasons for employees to leave.  
+
+Next step, we need to test if work accident is related to leave of the employees.  
+
+```{r}
+knitr::kable(
+  human_resource %>% group_by(left) %>% 
+  summarise(n_employee = n(), work_accident_prop = mean(Work_accident)) 
+)
+
+
+```
+
+It is obvious that the proportion of people who suffer work accident and leave is much lower than the proportion of people who suffer work accident and stay. Hence, it is unlikely that work accident is one of the main reason for empoyees to leave.  
+
+Lastly, let's check if people who stay longer are more likely to leave.  
+
+```{r}
+human_resource %>% ggplot(aes(x = time_spend_company)) + geom_bar() + facet_grid(~left)
+human_resource %>% group_by(left) %>% summarise(time_stay_company = mean(time_spend_company))
+```
+
+Although the distributions of time stay in the firm are quite different between people who leave and people who stay, the average time stay in the company are similar between these two groups of people. So it is unlikely to say the time spend in the company is a reason for employees to leave.  
+
+In conclusion, we believe that the employees leave mainly due to unsatisfaction and low salary.  
+
+# Question: Performance difference between two groups of people who choose to leave.
+
+```{r}
+human_resource %>% 
+  filter(left == 1) %>% 
+  ggplot(aes(x = satisfaction_level)) +
+  geom_histogram(bins = 30) + facet_grid(~left) 
+```
+
+There is one more phenomenon we need to notice. If we visualize the histogram of satisfaction level of employees who left, we can see three modes. It is understandable that people with low satisfaction and medium satisfaction level choose to leave. But why many employees left even if they were highly satisfied?  
+
+Is it because of the salary or working hours? Should we retain those people?  
+
+Now we split the people who left into two groups. The first group is the people who have less than 0.7 satisfaction level. The second group is the people who have more than 0.7 satisfaction level. We call them low satisfaction group and high satisfaction group.  
+
+```{r}
+hr_leave_low_sat <- human_resource %>% filter(left == 1 & satisfaction_level < 0.7)
+hr_leave_high_sat <- human_resource %>% filter(left == 1 & satisfaction_level >= 0.7)
+```
+
+```{r}
+num_low_group <- as.double(count(hr_leave_low_sat))
+num_high_group <- as.double(count(hr_leave_high_sat))
+
+low_sat_salary_prop <- hr_leave_low_sat %>% 
+  group_by(salary) %>% 
+  summarise(salary_num = n()) %>% 
+  mutate(low_sat_salary_prop = round(salary_num / num_low_group * 100, 2)) %>% 
+  select(salary, low_sat_salary_prop)
+
+high_sat_salary_prop <- hr_leave_high_sat %>% 
+  group_by(salary) %>% 
+  summarise(salary_num = n()) %>% 
+  mutate(high_sat_salary_prop = round(salary_num / num_high_group * 100, 2)) %>% 
+  select(salary, high_sat_salary_prop)
+
+salary_prop <- inner_join(low_sat_salary_prop, high_sat_salary_prop, by = "salary")
+high_salary_prop <- as.numeric(salary_prop[1, 2:3])
+medium_salary_prop <- as.numeric(salary_prop[3, 2:3])
+low_salary_prop <- as.numeric(salary_prop[2, 2:3])
+
+low_sat_summary <- hr_leave_low_sat %>% summarise(group = "low satisfaction group",
+                               average_last_eva = round(mean(last_evaluation), 2),
+                               average_num_project = round(mean(number_project), 2),
+                               average_hours = round(mean(average_monthly_hours), 2),
+                               average_time_spend_company = round(mean(time_spend_company), 2),
+                               mean_accident_prop = round(mean(Work_accident) * 100, 2))
+
+high_sat_summary <- hr_leave_high_sat %>% summarise(group = "high satisfaction group",
+                               average_last_eva = round(mean(last_evaluation), 2),
+                               average_num_project = round(mean(number_project), 2),
+                               average_hours = round(mean(average_monthly_hours), 2),
+                               average_time_spend_company = round(mean(time_spend_company), 2),
+                               mean_accident_prop = round(mean(Work_accident) * 100, 2))
+
+low_sat_summary[2, ] <- high_sat_summary
+
+hr_leave_comparison <- data.frame(low_sat_summary, low_salary_prop, medium_salary_prop, high_salary_prop)
+meaningless_sta <- hr_leave_comparison %>% select(group, mean_accident_prop, low_salary_prop, medium_salary_prop, high_salary_prop)
+meaningful_sta <- hr_leave_comparison %>% select(group, average_last_eva, average_num_project, average_hours, average_time_spend_company)
+
+knitr::kable(meaningless_sta)
+knitr::kable(meaningful_sta)
+```
+
+We summarize some statisitcs for these two groups and find some facts.  
+
+1. It seems that the accident proportion and low, medium, high salary proportion are similar in these two groups, which means work accident and the salary is not the reason why high satisfaction group choose to leave.  
+2. The average last evaluation score, average number of projects, average working hours and average time stay in the company are different between two groups. In the correlation analysis, we have already known that the first three factors are correlated. The logic behind it must be something like, as you work for more hours, you will be able to work on more projects and get a higher evaluation score. Besides, people who stay in the company for longer time can work on more projects.  
+
+By this facts, we can know that most of highly satisfied employees create great value for the firm. They are more familiar with the work, generally work harder, accumulate more experience and get a higher evaluation score.  
+
+So why they left? I guess most of themt left for getting promoted. Because of their recent outstanding performances, other firms would try to cut corner and provide better offers.  
+
+Therefore, they worth us to retain. In order to avoid losing these outstanding workers, I would recommend the company promotes the employees who stay for a long time, work hard and recieve a high evaluation score recently.  
+
+# Question: How to retain expereienced employees.
+
+Last part, we mention that most of high statisfaction workers who left perform pretty well. In this part, I will further investigate the condition of experienced employees, try to explain why they choose to leave and what can we do in order to retain them.  
+
+How do we define experienced employees is a very good question. Only employees who accmpolish more than 2 projects and stay for more than 2 years can be recorded in this dataset. On the basis of that, I set three stricter standards.  
+
+First, stay in the company for more than 3 years.  
+Second, accomplish more than 4 projects.  
+Three, the last evaluation score must be greater than half of all employees.  
+
+These numbers are selected out of the quantiles of the variables.  
+
+```{r}
+quantile(human_resource$number_project)
+quantile(human_resource$time_spend_company)
+quantile(human_resource$last_evaluation)
+
+hr_exp_employee <- human_resource %>% 
+  filter(number_project >= 4 & time_spend_company >= 3) %>% filter(last_evaluation > 0.72) 
+
+hr_exp_employee$left <- as.factor(hr_exp_employee$left)
+```
+
+To analyze the performance, I decide to group these employees based on whether they leave and the time they stay in the company.  
+
+I create two time series plots first.  
+The first plot is about average working hours, average number of project and the status (leave or stay).  
+The second plot is about average satisfaction level, average salary, the number of workers and the status (leave or stay).  
+
+```{r}
+time_spend_series <- hr_exp_employee %>% 
+  group_by(left, time_spend_company) %>% 
+  summarise(n = n(),
+            average_satisfaction_level = round(mean(satisfaction_level), 1),
+            average_salary = round(mean(salary_factor), 2),
+            average_working_hour = round(mean(average_monthly_hours), 1),
+            average_last_eva_score = round(mean(last_evaluation), 1),
+            average_num_project = round(mean(number_project), 1),
+            salary_factor_and_num = paste(as.character(average_salary), as.character(n)))
+
+time_spend_series %>% ggplot(aes(x = time_spend_company, y = average_working_hour, group = left, label = average_num_project)) + geom_point() + geom_line(aes(linetype = left), color = "blue") + geom_text(aes(label = average_num_project), hjust = 0.5, vjust = -0.5) + theme_bw()
+
+time_spend_series %>% ggplot(aes(x = time_spend_company, y = average_satisfaction_level, group = left, label = salary_factor_and_num)) + geom_point() + geom_line(aes(linetype = left), color = "blue") + geom_text(aes(label = salary_factor_and_num), hjust = 0.3, vjust = -0.5) + theme_bw()
+```
+
+In the first plot we get several facts:  
+1. The average working hours of people who left skyrockets in the forth year. The average number of projects increases drastically in the meanwhile.  
+2. After the forth year, the average working hour and number of projects of people who left slide down, but the average working hour of them is still much higher than the working hour of those who stay.  
+3. After the sixth year, no experienced employees left.  
+
+In the second plot we also get some information:  
+1. In the third year, not much experienced employees want to leave the company. Those who leave in the third year do that because of low salary.  
+2. In the forth year, the average satisfaction level of people who left plummets, a large amount of experienced employees choose to leave in this year. Those who choose to stay have relatively lower salary than those who choose to leave.  
+3. In the fifth and sixth year, although the average satisfaction level of people who left skyrocketted, many of them still choose to leave the company.  
+4. After the fifth year, even if the average salary of those who stay is still unstable, the average satisfaction level keeps on growing and maintain at 0.7 from the eighth year.  
+
+**Now let's summarize the information we get and describe the overall situation.**
+
+Most of experienced employees left in the forth, fifth and sixth year are college graduate. They left for higher salary.  
+
+I claim this because the average working hour of these three groups are very high, while the average salary of them is very low. This is a typical phenomenon. Those graudate just commence their career in the company, it is hard for them to get high paid from the beginning. However, after spending 4 to 6 years for accumulating experience, they would expect a higher salary.  
+
+The employees who left in the forth year are the most valuable employees, and I will describe them as 'first-class' experienced employees. They have the highest average working hour and number of projects, but their salary doesn't match their performance. This result leads to those employees' leave.  
+
+As for those who left in the fifth and sixth year, they are not as valuable as thoes who left in the forth year, and I will descibe them as 'second-class' experienced employees. These people also work hard, but they are not as hard-working and outstanding as those who left in the forth year. They need more time to accmulate experience and therefore they are more satisifed even if the salary is low. And they eventually left because they gain enough experience and other firms provide relatively competitve offers. But they are still not as great as those who left in the forth year.  
+
+**Recommendation**
+
+Based on the analysis above, I believe we need a new policy.  
+
+In order to retain those first-class and second-class experienced employees, we need to raise their salary before they leave. For the first-class experienced employees who work harder and complete more projects, we raise their salary at the forth year. And for the second-class experienced employees who are relatively less competitive than the first-class, we gradually raise their salary in the fifth and sixth year. The level of pay raise should be different between the first-class and the second-class, because the first-class deserves a higher pay.  
+
+However, we need to consider one more thing, the loyalty. The evaluation of pay raise should not only depend on the performance. It should be related to each individual employee's career plan and their loyalty. The additional money pay by the firm would become meaningless if we pay a person who will eventually leave the firm or who doesn't good at collaboration. The HR department needs to consider the invidiual situation thoroughly and provide a corresponding raise for each person.  
+
+**In-depth Analysis by the number of projects**
+
+We only group the employees based on whether they leave and the time they stay in the company before. Now we further group them by the number of project they do.  
+
+I create a series of plots based on these new groups. The plots are about the proportion of employees leave/stay in a specific year. (i.e if the total number of employee that spend 3 years in the company is 1000, and the number of people who choose to left in the third year with 4 project completed is 200, the proportion is 0.2.) The number next to the point is the average satisfaction level of this group of employees.  
+
+
+```{r, fig.width = 6}
+num_data <- hr_exp_employee %>% group_by(time_spend_company) %>% summarise(total_number_per_year = n())
+
+time_spend_series2 <- hr_exp_employee %>% 
+  group_by(left, time_spend_company, number_project) %>% 
+  summarise(n = n(),
+            average_satisfaction_level = round(mean(satisfaction_level), 1),
+            average_salary = round(mean(salary_factor), 2),
+            average_working_hour = round(mean(average_monthly_hours), 2),
+            average_last_eva_score = round(mean(last_evaluation), 2))
+
+time_spend_series2 <- left_join(time_spend_series2, num_data, by = "time_spend_company")
+time_spend_series2 <- time_spend_series2 %>%
+  mutate(prop_employee_year = round(n / total_number_per_year * 100, 1))
+
+time_spend_series2 %>% ggplot(aes(x = number_project, y = prop_employee_year, group = left, label = average_satisfaction_level)) + geom_point() + geom_line(aes(linetype = left), color = "blue") + geom_text(aes(label = average_satisfaction_level), hjust = 0, vjust = -0.5) + facet_grid(~time_spend_company) + theme_bw() 
+```
+
+Now we can set more details for the policy.  
+
+1. What is the the best criteria to raise the salary for first-class experienced employees?  
+
+The best criteria is 3-to-4-year experience and 5 projects. After the forth-year, many of the experienced employees completed 6 projects are unsatisfied with the company and choose to leave. So the best solution is raising their salary in advance, as soon as they completed 5 projects.  
+
+2. What is the best criteria to raise the salary for second-class experienced employees?  
+
+In addition, the best criteria is 5-year experience and 5 projects.  
+
+Compared to the previous one, it is much harder to decide the criteria for second-class experienced employees. I will explain my criteria.  
+
+We must realize that people who left in the fifth year with 4 and 5 projects were not leaving because of unsatisfaction. Actually, their satisfaction level is pretty high. We have already discuss this phenomenon and conlude that they leave mainly because of better offers coming from other firms.  
+
+Without doubt, these people are needed by the firms, but I believe no firm could stop the leave of all employees and we must balance the cost and the benefit. If we raise their pay in advance, when they complete 4 projects, they might still leave if any better offer is provided.  
+
+We need to spend the money on the right person. It is accpetable to lose part of the experienced employees, as long as we persuade the best groups to stay.  
+
+Therefore, we only award those who can complete 5 projects in 5 years. This group of people worths us to pay more.  
+
+# Conclusion for all questions 
+- The employees leave mainly due to unsatisfaction and low salary.  
+- Many employees left even if they are satisifed with the firm. We believe it is because of better offers provided by other companys. Since those highly satisfied employees perform very well, it is better to raise their pay and promote them.
+- Most of the employees who left are college graduate, it is hard for them to earn a lot at the beginning. So they are likely to leave after they gain enough experience.  
+- The best cirteria for raising the salary to retain the greatest experienced employees, those who left in the forth year, is 3-to-4-year experience and 5 projects.  
+- The best cirteria for raising the salary to retian those second-class experienced employees, those who left in the fifth or sixth year, is 5-year experience and 5 projects.  
+
+
+
+
+
+
+
+
+
+
+
+

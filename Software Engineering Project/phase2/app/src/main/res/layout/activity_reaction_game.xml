@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".reaction_game.ReactionGameActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="230dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_1"
+            android:layout_width="130dp"
+            android:layout_height="98dp" />
+
+        <ImageButton
+            android:id="@+id/btn_2"
+            android:layout_width="130dp"
+            android:layout_height="98dp"/>
+
+        <ImageButton
+            android:id="@+id/btn_3"
+            android:layout_width="130dp"
+            android:layout_height="98dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="130dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_4"
+            android:layout_width="130dp"
+            android:layout_height="98dp" />
+
+        <ImageButton
+            android:id="@+id/btn_5"
+            android:layout_width="130dp"
+            android:layout_height="98dp"/>
+
+        <ImageButton
+            android:id="@+id/btn_6"
+            android:layout_width="130dp"
+            android:layout_height="98dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_7"
+            android:layout_width="130dp"
+            android:layout_height="98dp" />
+
+        <ImageButton
+            android:id="@+id/btn_8"
+            android:layout_width="130dp"
+            android:layout_height="98dp"/>
+
+        <ImageButton
+            android:id="@+id/btn_9"
+            android:layout_width="130dp"
+            android:layout_height="98dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="30dp">
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:text="@string/time"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/timer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="50dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:text="@string/points"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/pause_or_resume"
+        android:layout_width="49dp"
+        android:layout_height="50dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="21dp"
+        android:layout_weight="1" />
+
+</RelativeLayout>

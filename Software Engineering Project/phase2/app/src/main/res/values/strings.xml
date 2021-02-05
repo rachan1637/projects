@@ -1,0 +1,74 @@
+<resources>
+    <string name="app_name">GameProject</string>
+    <string name="reaction_game">Reaction Game</string>
+    <string name="puzzle_game">Puzzle Game</string>
+    <string name="obstacle_game">Obstacle Game</string>
+    <string name="title_activity_obstacle_game">obstacleGameActivity</string>
+    <string name="start_puzzle_game">Start Puzzle Game</string>
+    <string name="customize">Customize</string>
+    <string name="puzzle_game_intro">Solve as many puzzles as you can in limited time! :)</string>
+    <string name="puzzle_game_intro2">Remember to find the mystery shop in option button</string>
+    <string name="options">Options</string>
+    <string name="return_to_game">Return to game</string>
+    <string name="exit_game">Exit game</string>
+    <string name="customize_image">Customize Puzzle Image</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="points">Points</string>
+    <string name="time">Time</string>
+    <string name="play_game">play</string>
+    <string name="obstacle_game_rule">Obstacle Game Rule</string>
+    <string name="start_obstacle_game">Start Obstacle Game</string>
+    <string name="customization">Customization</string>
+    <string name="welcome_obstacle_game">Welcome to Obstacle Game.</string>
+    <string name="before_start">Reminder: Start the game after reading the game rule.</string>
+    <string name="about_customization">We are still working on the customization part, \n please come back at phase2.</string>
+    <string name="puzzle_game_final_score">Your final score is: </string>
+    <string name="exit">Exit</string>
+    <string name="_0">0</string>
+    <string name="_02_00">02:00</string>
+    <string name="puzzles_completed_0">Puzzles Completed: 0</string>
+    <string name="score_0">Score: 0</string>
+    <string name="of_moves_0"># of Moves: 0</string>
+    <string name="user_name">Username:</string>
+    <string name="password">Password:</string>
+    <string name="log_in">Log In</string>
+    <string name="thanks_obstacle_game">Thanks for playing obstacle game! </string>
+    <string name="log_in_warning">The account does not exist or password does not match</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="speed">Choose one speed of each mole stay on screen:</string>
+    <string name="images_selected">Selected images: </string>
+    <string name="save_image_selection">Save selected images </string>
+    <string name="add_image">Add image</string>
+    <string name="next_page">Next Page</string>
+    <string name="obstacle_game_rule_des1">To start the game, make sure you switch your phone to landsacpe mode. Then
+    you can set the customization option in the menu, or simply get started right away using default customizations.
+        Before the game starts, there would be a 5 seconds count down, after which you can start controlling the spaceship
+    to doge obstacles by tapping on the screen.</string>
+    <string name="obstacle_game_rule_des2">In each game you have 3 lives, and your lives will decrease by 1 whenever you
+    hit an obstacle, after you hit the obstacle each time your will not lose further lives in the next 3 seconds. You lose
+    the game by having your lives reduce to 0 or staying out of the screen for too long. The obstacles are infinite so survive
+    for as long as you can.</string>
+    <string name="continue_game">Continue</string>
+    <string name="change_background_colour">Change Background Colour</string>
+    <string name="colour_choose">Choose a colour you like!</string>
+    <string name="achievements">Achievements</string>
+    <string name="back">Back</string>
+    <string name="item1">Small Hint— 600 score</string>
+    <string name="item1_description">Small Hint: Move one piece of the puzzle to its correct location</string>
+    <string name="item2">Big Hint— 1400 score</string>
+    <string name="item2_description">Big Hint: Move three pieces of the puzzle to their correct location</string>
+    <string name="item3">Change Puzzle— 800 score</string>
+    <string name="item3_description">Change Puzzle: Switch to a new puzzle</string>
+    <string name="shop_statement">Welcome to the Mystery Shop!</string>
+    <string name="buy">Buy</string>
+    <string name="mystery_shop">Mystery Shop</string>
+    <string name="unlock">Bonus Puzzle Unlocked</string>
+    <string name="signup_error">User name or Password Cannot be empty</string>
+    <string name="special_characters_found">Password can not contain special characters : ; or -</string>
+    <string name="redundant_user">This user already exist</string>
+    <string name="puzzle_instruction">To solve, slide the tile across the screen</string>
+    <string name="about">About</string>
+    <string name="quit">QUIT</string>
+    <string name="WAM">Whack-a-Mole</string>
+</resources>

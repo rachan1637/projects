@@ -1,0 +1,13 @@
+#######
+#Step 1
+Code Affected: MainActivity
+Added three new activties for each minigame, added buttons in MainActivity to start each new activity
+Added gamePanel and mainThread for handling front end
+Added/edited corresponding XML files.
+
+#######
+#Step 2
+Code Affected: GestureDetectGridView, PuzzleAdapter, puzzleGameActivity, activity_puzzle_game
+Added PuzzleAdapter and GestureDetectGridView as the custom adapter and view for this game.
+Added basic methods for sliding functions in puzzleGameActivity.
+Changed activity_puzzle_game to display GestureDetectGridView.

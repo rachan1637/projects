@@ -1,0 +1,102 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:fillViewport="true">
+
+    <RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/activity_puzzle_game_select_image"
+    android:background="#FFFFFF">
+
+        <TextView
+            android:id="@+id/game_shop_header"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:textSize="15sp"
+            android:text="@string/shop_statement" />
+
+        <RadioGroup
+            android:id="@+id/items_game_shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/game_shop_header"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp">
+
+            <RadioButton
+                android:id="@+id/item1_game_shop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item1" />
+
+            <RadioButton
+                android:id="@+id/item2_game_shop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item2" />
+
+            <RadioButton
+                android:id="@+id/item3_game_shop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/item3" />
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/item1_description"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_below="@id/items_game_shop"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:text="@string/item1_description" />
+
+        <TextView
+            android:id="@+id/item2_description"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/item1_description"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:text="@string/item2_description" />
+
+
+        <TextView
+            android:id="@+id/item3_description"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/item2_description"
+            android:layout_marginTop="20dp"
+            android:textSize="15sp"
+            android:text="@string/item3_description" />
+
+        <Button
+            android:id="@+id/buy_game_shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/item3_description"
+            android:layout_marginTop="60dp"
+            android:layout_centerHorizontal="true"
+            android:text="@string/buy" />
+
+        <Button
+            android:id="@+id/back_game_shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buy_game_shop"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="@string/back" />
+
+
+    </RelativeLayout>
+
+</ScrollView>
